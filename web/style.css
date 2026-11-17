@@ -1,0 +1,716 @@
+/* jo's log design tokens and shared components (spec section 7).
+   Square corners, solid 3px ink borders, hard shadows; no broken-line borders, no blends, no emoji. */
+
+:root {
+  --bg: #f6efe3;
+  --panel: #fffaf0;
+  --ink: #3a2a1f;
+  --muted: #6f5d4d;
+  --placeholder: #9a8878;
+  --accent: #2f6b66;
+  --attention: #d9663f;
+  --on-accent: #fffaf0;
+  --line: rgba(58, 42, 31, 0.25); /* pale solid divider */
+
+  --mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+  --sans: -apple-system, "PingFang TC", "Noto Sans TC", sans-serif;
+
+  --border: 3px solid var(--ink);
+  --shadow-frame: 5px 5px 0 var(--ink);
+  --shadow-btn: 3px 3px 0 var(--ink);
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  border-radius: 0;
+}
+
+[hidden] {
+  display: none !important;
+}
+
+html,
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--sans);
+  font-size: 14px;
+  line-height: 1.45;
+  -webkit-text-size-adjust: 100%;
+  -webkit-tap-highlight-color: transparent;
+}
+
+a {
+  color: inherit;
+}
+
+/* ---------- frame ---------- */
+
+.frame {
+  max-width: 480px;
+  margin: 0 auto;
+  min-height: 100vh;
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  background: var(--bg);
+}
+
+@media (min-width: 540px) {
+  .frame {
+    margin: 24px auto;
+    min-height: calc(100vh - 48px);
+    min-height: calc(100dvh - 48px);
+    border: var(--border);
+    box-shadow: var(--shadow-frame);
+  }
+}
+
+.top {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 14px 12px;
+  padding-top: calc(14px + env(safe-area-inset-top));
+}
+
+.top svg {
+  flex: none;
+  display: block;
+}
+
+.brand {
+  flex: 1;
+  font-family: var(--mono);
+  font-size: 18px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.meta {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  font-family: var(--mono);
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--muted);
+  line-height: 1.35;
+  text-align: right;
+}
+
+.meta .status {
+  font-family: var(--sans);
+  font-size: 12px;
+  color: var(--muted);
+  text-decoration: none;
+}
+
+.meta .status.alert {
+  color: var(--ink);
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+main {
+  flex: 1;
+  padding: 0 14px 24px;
+}
+
+/* ---------- bottom nav ---------- */
+
+.nav {
+  position: sticky;
+  bottom: 0;
+  display: flex;
+  background: var(--bg);
+  border-top: var(--border);
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+.nav a {
+  flex: 1;
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  font-family: var(--mono);
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+  color: var(--muted);
+  text-decoration: none;
+}
+
+.nav a + a {
+  border-left: var(--border);
+}
+
+.nav a.on {
+  background: var(--accent);
+  color: var(--on-accent);
+}
+
+/* ---------- type ---------- */
+
+.lbl {
+  display: block;
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+  margin-bottom: 4px;
+}
+
+.lbl i {
+  font-family: var(--sans);
+  font-style: normal;
+  font-weight: 500;
+  text-transform: none;
+  letter-spacing: 0;
+  color: var(--muted);
+  margin-left: 4px;
+}
+
+.sec {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 16px 0 8px;
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+}
+
+.sec::after {
+  content: "";
+  flex: 1;
+  border-top: 2px solid var(--line);
+}
+
+.sec:first-child {
+  margin-top: 0;
+}
+
+.sec .n {
+  color: var(--muted);
+  font-weight: 500;
+}
+
+.muted {
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.empty {
+  color: var(--muted);
+  font-size: 13px;
+  margin: 6px 0 12px;
+}
+
+.msg {
+  min-height: 20px;
+  margin: 8px 0 0;
+  font-size: 13px;
+}
+
+/* ---------- form ---------- */
+
+.f {
+  margin-bottom: 12px;
+}
+
+.in {
+  display: block;
+  width: 100%;
+  min-height: 44px;
+  margin: 0;
+  padding: 8px 10px;
+  background: var(--panel);
+  color: var(--ink);
+  border: var(--border);
+  font-family: var(--sans);
+  font-size: 16px; /* 16px keeps iOS from zooming on focus */
+  line-height: 1.45;
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+textarea.in {
+  resize: vertical;
+}
+
+.in::placeholder {
+  color: var(--placeholder);
+  opacity: 1;
+}
+
+.in:focus {
+  outline: 3px solid var(--accent);
+  outline-offset: 0;
+}
+
+.in.need {
+  border-color: var(--attention);
+}
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.chip {
+  min-height: 40px;
+  padding: 6px 10px;
+  margin: 0;
+  background: var(--panel);
+  color: var(--ink);
+  border: var(--border);
+  font-family: var(--sans);
+  font-size: 14px;
+  line-height: 1.2;
+  cursor: pointer;
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+.chip.on {
+  background: var(--accent);
+  color: var(--on-accent);
+  font-weight: 700;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  padding: 8px 14px;
+  margin: 0;
+  background: var(--panel);
+  color: var(--ink);
+  border: var(--border);
+  box-shadow: var(--shadow-btn);
+  font-family: var(--mono);
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1.2;
+  text-align: center;
+  text-decoration: none;
+  cursor: pointer;
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+.btn:active:not(:disabled) {
+  transform: translate(3px, 3px);
+  box-shadow: none;
+}
+
+.btn:disabled {
+  color: var(--muted);
+  cursor: default;
+}
+
+.btn.primary {
+  background: var(--accent);
+  color: var(--on-accent);
+  font-size: 15px;
+}
+
+.btn.block {
+  display: flex;
+  width: 100%;
+}
+
+.btn:focus-visible,
+.chip:focus-visible,
+.nav a:focus-visible,
+.it:focus-visible {
+  outline: 3px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.btns {
+  display: flex;
+  gap: 12px;
+}
+
+.btns .btn {
+  flex: 1;
+}
+
+/* ---------- blocks ---------- */
+
+.panel {
+  background: var(--panel);
+  border: var(--border);
+  padding: 12px;
+  margin-bottom: 12px;
+}
+
+.badge {
+  display: inline-block;
+  background: var(--attention);
+  color: var(--ink);
+  border: 2px solid var(--ink);
+  padding: 0 6px;
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 600;
+  line-height: 16px;
+  vertical-align: 1px;
+}
+
+.it {
+  display: block;
+  width: 100%;
+  margin: 0 0 8px;
+  padding: 8px 10px;
+  background: var(--panel);
+  color: var(--ink);
+  border: var(--border);
+  font-family: var(--sans);
+  font-size: 14px;
+  text-align: left;
+}
+
+button.it {
+  cursor: pointer;
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+.it .m {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--muted);
+  margin-bottom: 3px;
+}
+
+.it p {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 600; /* entry text is bold in every list; the .m meta line stays regular */
+  line-height: 1.45;
+}
+
+/* square checkbox with the pixel tick (tickSvg) */
+.bx {
+  flex: none;
+  width: 22px;
+  height: 22px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--panel);
+  border: var(--border);
+  color: var(--on-accent);
+}
+
+.bx.on {
+  background: var(--accent);
+}
+
+.bx svg {
+  display: block;
+}
+
+.prog {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 12px;
+}
+
+.prog .bar {
+  flex: 1;
+  height: 16px;
+  background: var(--panel);
+  border: var(--border);
+}
+
+.prog .bar > div {
+  height: 100%;
+  background: var(--accent);
+}
+
+.toast {
+  position: fixed;
+  z-index: 10;
+  top: calc(12px + env(safe-area-inset-top));
+  left: 50%;
+  transform: translateX(-50%);
+  max-width: calc(100% - 32px);
+  padding: 8px 14px;
+  background: var(--panel);
+  color: var(--ink);
+  border: var(--border);
+  box-shadow: var(--shadow-btn);
+  font-family: var(--sans);
+  font-size: 14px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+/* ---------- settings ---------- */
+
+.kv {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 6px 0;
+  border-bottom: 2px solid var(--line);
+  font-size: 14px;
+}
+
+.kv:last-of-type {
+  border-bottom: 0;
+}
+
+.kv span:first-child {
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+  align-self: center;
+}
+
+.foot {
+  margin: 20px 0 0;
+}
+
+/* ops the server refused, each with a copy button */
+.rj {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 6px 0;
+  border-bottom: 2px solid var(--line);
+  font-size: 13px;
+}
+
+.rj:last-child {
+  border-bottom: 0;
+}
+
+.rj p {
+  flex: 1;
+  min-width: 0;
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+
+.rj .btn {
+  flex: none;
+}
+
+/* ---------- log ---------- */
+
+/* solid-border toggle for the optional Stakeholders / Feedback inputs */
+.more {
+  display: block;
+  width: 100%;
+  min-height: 44px;
+  margin: 2px 0 12px;
+  padding: 6px 10px;
+  background: transparent;
+  color: var(--muted);
+  border: 2px solid var(--muted);
+  font-family: var(--mono);
+  font-size: 12px;
+  font-weight: 500;
+  text-align: center;
+  cursor: pointer;
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+.more[aria-expanded="true"] {
+  color: var(--ink);
+  border-color: var(--ink);
+}
+
+.more:focus-visible {
+  outline: 3px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* ---------- entry editor modal ---------- */
+
+.modal-bg {
+  position: fixed;
+  z-index: 20;
+  inset: 0;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 16px 14px;
+  padding-top: calc(16px + env(safe-area-inset-top));
+  background: rgba(58, 42, 31, 0.5);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+.modal {
+  width: 100%;
+  max-width: 452px;
+  margin: auto 0;
+  padding: 14px;
+  background: var(--bg);
+  border: var(--border);
+  box-shadow: var(--shadow-frame);
+}
+
+.modal:focus {
+  outline: none;
+}
+
+.modal-del {
+  margin-top: 12px;
+}
+
+.btn.confirm {
+  background: var(--ink);
+  color: var(--panel);
+}
+
+/* ---------- week ---------- */
+
+/* sweep checklist: a real checkbox sits invisibly over the square box, so the whole row toggles
+   and the keyboard focus ring shows on the box */
+.chk {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 44px;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.chk-in {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.chk-in:focus-visible + .bx {
+  outline: 3px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.bx:not(.on) svg {
+  display: none;
+}
+
+.wk-prog {
+  margin-top: 8px;
+}
+
+/* the list row's text is a button that opens the editor; it must look like plain text */
+.it-open {
+  display: block;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  background: none;
+  color: inherit;
+  border: 0;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+.it-open:focus-visible {
+  outline: 3px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.imp {
+  display: flex;
+  gap: 10px;
+  margin-top: 8px;
+}
+
+.imp .in {
+  flex: 1;
+  min-width: 0;
+}
+
+.imp .btn {
+  flex: none;
+}
+
+.wk-more {
+  margin-top: 16px;
+}
+
+/* ---------- all ---------- */
+
+.al-chips {
+  margin: 8px 0;
+}
+
+.al-results {
+  margin-top: 4px;
+}
+
+/* date column + content column inside a row button */
+.al-row {
+  display: grid;
+  grid-template-columns: 52px minmax(0, 1fr);
+  gap: 8px;
+}
+
+.al-d {
+  font-family: var(--mono);
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1.5;
+}
+
+.al-c p,
+.al-sub {
+  overflow-wrap: anywhere;
+}
+
+.al-sub {
+  margin-top: 2px;
+  font-size: 12px;
+  line-height: 1.45;
+  color: var(--muted);
+}
+
+.al-copy {
+  margin-top: 16px;
+}
+
+.al-foot a {
+  font-family: var(--mono);
+  font-size: 12px;
+  color: var(--muted);
+  text-underline-offset: 3px;
+}
+
+.al-foot a:focus-visible {
+  outline: 3px solid var(--accent);
+  outline-offset: 2px;
+}
